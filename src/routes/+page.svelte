@@ -37,7 +37,7 @@
 
   <div class="space-y-2">
     <label>Yard Line:</label>
-    <input type="range" min="15" max="85" bind:value={yardLine} />
+    <input type="range" min="10" max="80" bind:value={yardLine} />
     <span>{yardLine} yard line</span>
   </div>
 
@@ -82,27 +82,38 @@
 
   <!-- Football Field Graphic -->
   <div
-    class="relative mt-8 border-2 border-white bg-green-700 h-56 rounded shadow overflow-hidden"
+    class="relative mt-8 border-2 border-white bg-green-700 h-56 w-full rounded shadow overflow-hidden"
   >
-    <!-- Horizontal Endzones -->
+    <!-- Horizontal Endzones with matching stripe width and vertical text -->
     <div
-      class="absolute inset-y-0 left-0 w-6 bg-blue-900 flex items-center justify-center text-white text-xs"
+      class="absolute inset-y-0 left-0 w-[10%] bg-blue-900 flex flex-col items-center justify-center text-white text-xs"
     >
-      ENDZONE
+      <span class="transform rotate-270">ENDZONE</span>
     </div>
     <div
-      class="absolute inset-y-0 right-0 w-6 bg-red-900 flex items-center justify-center text-white text-xs"
+      class="absolute inset-y-0 right-0 w-[10%] bg-red-900 flex flex-col items-center justify-center text-white text-xs"
     >
-      ENDZONE
+      <span class="transform rotate-90">ENDZONE</span>
     </div>
 
-    <!-- Alternating green stripes -->
+    <!-- Goalpost (left side only) -->
+    <div
+      class="absolute top-1/2 left-[2%] w-1 h-12 bg-yellow-400 transform -translate-y-1/2"
+    ></div>
+    <div
+      class="absolute top-[calc(50%-24px)] left-[1.25%] w-2 h-1 bg-yellow-400"
+    ></div>
+    <div
+      class="absolute top-[calc(50%+24px)] left-[1.25%] w-2 h-1 bg-yellow-400"
+    ></div>
+
+    <!-- Alternating green stripes with updated tones -->
     {#each Array(10) as _, i}
       <div
         class="absolute top-0 bottom-0"
         style="
-          left: {6 + i * 8.8}%;
-          width: 8.8%;
+          left: {10 + i * 8}%;
+          width: 8%;
           background-color: {i % 2 === 0 ? '#208b3a' : '#25a244'};
         "
       ></div>
@@ -110,7 +121,7 @@
 
     <!-- Midfield Logo -->
     <div
-      class="absolute top-1/2 left-1/2 w-12 h-12 bg-white/20 rounded-full transform -translate-x-1/2 -translate-y-1/2 text-xs flex items-center justify-center text-white"
+      class="absolute top-1/2 left-[50%] w-12 h-12 bg-white/20 rounded-full transform -translate-x-1/2 -translate-y-1/2 text-xs flex items-center justify-center text-white"
     >
       LOGO
     </div>
@@ -121,7 +132,7 @@
       style="
         top: {hashToPercent(hash)};
         transform: translateY(-50%);
-        left: calc(({yardLine} / 100) * 88% + 6%);
+        left: calc(({yardLine} / 100) * 80% + 10%);
       "
     ></div>
   </div>
