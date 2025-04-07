@@ -6,7 +6,6 @@
   let probability: number = 0.0;
 
   async function predictProbability() {
-    // Call to your backend API
     const response = await fetch("https://your-api-url.com/predict", {
       method: "POST",
       headers: {
@@ -18,6 +17,17 @@
     const data = await response.json();
     probability = data.probability;
   }
+
+  function hashToPercent(hash: string): string {
+    switch (hash) {
+      case "left":
+        return "30%";
+      case "right":
+        return "70%";
+      default:
+        return "50%";
+    }
+  }
 </script>
 
 <main class="p-6 max-w-md mx-auto space-y-4">
@@ -27,7 +37,7 @@
 
   <div class="space-y-2">
     <label>Yard Line:</label>
-    <input type="range" min="10" max="80" bind:value={yardLine} />
+    <input type="range" min="15" max="85" bind:value={yardLine} />
     <span>{yardLine} yard line</span>
   </div>
 
@@ -71,19 +81,49 @@
   {/if}
 
   <!-- Football Field Graphic -->
-  <div class="relative mt-8 border border-green-800 bg-green-600 h-48">
-    <div class="absolute top-0 bottom-0 w-px bg-white left-1/2"></div>
+  <div
+    class="relative mt-8 border-2 border-white bg-green-700 h-56 rounded shadow overflow-hidden"
+  >
+    <!-- Horizontal Endzones -->
     <div
-      class="absolute inset-y-0 w-12 bg-green-700/50"
-      style="left: calc(100% * {yardLine} / 100);"
-    ></div>
-    <div class="absolute bottom-2 left-2 text-white text-xs">0</div>
-    <div class="absolute bottom-2 right-2 text-white text-xs">100</div>
-    <div
-      class="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-white text-xs"
+      class="absolute inset-y-0 left-0 w-6 bg-blue-900 flex items-center justify-center text-white text-xs"
     >
-      50
+      ENDZONE
     </div>
+    <div
+      class="absolute inset-y-0 right-0 w-6 bg-red-900 flex items-center justify-center text-white text-xs"
+    >
+      ENDZONE
+    </div>
+
+    <!-- Alternating green stripes -->
+    {#each Array(10) as _, i}
+      <div
+        class="absolute top-0 bottom-0"
+        style="
+          left: {6 + i * 8.8}%;
+          width: 8.8%;
+          background-color: {i % 2 === 0 ? '#208b3a' : '#25a244'};
+        "
+      ></div>
+    {/each}
+
+    <!-- Midfield Logo -->
+    <div
+      class="absolute top-1/2 left-1/2 w-12 h-12 bg-white/20 rounded-full transform -translate-x-1/2 -translate-y-1/2 text-xs flex items-center justify-center text-white"
+    >
+      LOGO
+    </div>
+
+    <!-- Kicker Marker -->
+    <div
+      class="absolute w-2 h-2 bg-yellow-300 rounded-full shadow-md border border-white"
+      style="
+        top: {hashToPercent(hash)};
+        transform: translateY(-50%);
+        left: calc(({yardLine} / 100) * 88% + 6%);
+      "
+    ></div>
   </div>
 </main>
 
